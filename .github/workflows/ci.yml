@@ -18,6 +18,8 @@ jobs:
         run: echo "~/.cargo/bin" >> "$GITHUB_PATH"
       - name: Install glib2
         run: sudo apt-get install libglib2.0-dev
+      - name: Install gtk3
+        run: sudo apt-get install libgtk-3-dev
       - name: Rust clippy
         run: cargo clippy
       - name: build
