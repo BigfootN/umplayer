@@ -17,11 +17,13 @@ impl SQLiteBuilder {
         let configure_path = current_dir.join(Self::SOURCE_DIR).join("configure");
         let sqlite_3_h_path = current_dir.join(Self::SOURCE_DIR).join("sqlite3.h");
         let sqlite_3_c_path = current_dir.join(Self::SOURCE_DIR).join("sqlite3.c");
+        let makefile_path = current_dir.join(Self::SOURCE_DIR).join("makefile");
 
         println!("cargo:rerun-if-changed={}", script_path.display());
         println!("cargo:rerun-if-changed={}", configure_path.display());
         println!("cargo:rerun-if-changed={}", sqlite_3_h_path.display());
         println!("cargo:rerun-if-changed={}", sqlite_3_c_path.display());
+        println!("cargo:rerun-if-changed={}", makefile_path.display());
 
         Self {
             build_dir,
