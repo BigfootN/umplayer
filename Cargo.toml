@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["database", "sqlite-sys", "sqlite"]
+members = ["database", "sqlite-sys"]
 
 [workspace.lints.clippy]
 pedantic = "deny"
