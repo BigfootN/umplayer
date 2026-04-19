@@ -8,6 +8,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: BigfootN/umplayer
+          submodules: 'true'
       - name: Update
         run: sudo apt-get update
       - name: Install curl

@@ -1,0 +1,4 @@
+[submodule "sqlite/sqlite_c_src"]
+	path = sqlite/sqlite_c_src
+	url = git@github.com:sqlite/sqlite.git
+	branch = master
