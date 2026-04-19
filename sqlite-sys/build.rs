@@ -1,8 +1,12 @@
+#![deny(clippy::pedantic)]
+
 use std::process::Command;
 
 struct SQLiteBuilder {
     build_dir: std::path::PathBuf,
     configure_path: std::path::PathBuf,
+    sqlite_3_h_path: std::path::PathBuf,
+    bindgen_out_path: std::path::PathBuf,
 }
 
 impl SQLiteBuilder {
@@ -15,8 +19,9 @@ impl SQLiteBuilder {
         let build_dir = current_dir.join(Self::BUILD_DIR);
         let script_path = current_dir.join("build.rs");
         let configure_path = current_dir.join(Self::SOURCE_DIR).join("configure");
-        let sqlite_3_h_path = current_dir.join(Self::SOURCE_DIR).join("sqlite3.h");
-        let sqlite_3_c_path = current_dir.join(Self::SOURCE_DIR).join("sqlite3.c");
+        let sqlite_3_h_path = current_dir.join(Self::BUILD_DIR).join("sqlite3.h");
+        let sqlite_3_c_path = current_dir.join(Self::BUILD_DIR).join("sqlite3.c");
+        let bindgen_out_path = current_dir.join("src").join("sqlite3.rs");
 
         println!("cargo:rerun-if-changed={}", script_path.display());
         println!("cargo:rerun-if-changed={}", configure_path.display());
@@ -26,6 +31,8 @@ impl SQLiteBuilder {
         Self {
             build_dir,
             configure_path,
+            sqlite_3_h_path,
+            bindgen_out_path
         }
     }
 
@@ -45,6 +52,11 @@ impl SQLiteBuilder {
         Command::new(&self.configure_path).current_dir(&self.build_dir).output().expect("failed to run configure");
     }
 
+    fn bindgen(&self) {
+        let bindgens = bindgen::Builder::default().header(self.sqlite_3_h_path.display().to_string()).generate().expect("bindgen failed");
+        bindgens.write_to_file(&self.bindgen_out_path).expect("bindgen failed");
+    }
+
     fn link(&self) {
         println!("cargo:rustc-link-search=native={}", self.build_dir.display());
         println!("cargo:rustc-link-lib=static=sqlite3");
@@ -55,4 +67,5 @@ fn main() {
     let sqlite3_builder = SQLiteBuilder::new();
     sqlite3_builder.build();
     sqlite3_builder.link();
+    sqlite3_builder.bindgen();
 }
