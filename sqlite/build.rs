@@ -2,8 +2,8 @@ use std::process::Command;
 
 const BUILD_DIR: &str = "sqlite3_build";
 
-const SQLITE_DIR: &str = "../sqlite";
-const CONFIGURE_PATH: &str = "../../sqlite/configure";
+const SQLITE_DIR: &str = "sqlite_c_src";
+const CONFIGURE_PATH: &str = "../sqlite_c_src/configure";
 
 fn main() {
     println!("cargo:rerun-if-changed={}", SQLITE_DIR);
@@ -15,6 +15,10 @@ fn main() {
 }
 
 fn create_sqlite_build_dir() {
+    if std::fs::exists(BUILD_DIR).unwrap() {
+        return;
+    }
+
     std::fs::create_dir(BUILD_DIR).expect("unable to create sqlite build dir");
 }
 
@@ -30,5 +34,5 @@ fn build_sqlite_static_lib() {
 
 fn link_libsqlite3() {
     println!("cargo:rustc-link-search=native={}", BUILD_DIR);
-    println!("cargo:rustc-link-lib=static=sqlite3");
+    println!("cargo:rustc-link-lib=sqlite3");
 }
