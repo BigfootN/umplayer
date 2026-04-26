@@ -4,3 +4,12 @@ members = ["database", "sqlite-sys"]
 
 [workspace.lints.clippy]
 pedantic = "deny"
+
+[workspace.lints.rust]
+unused = "deny"
+rust-2024-compatibility = "deny"
+nonstandard-style = "deny"
+future-incompatible = "deny"
+deprecated-safe = "deny"
+warnings = "deny"
+missing_docs = "deny"
